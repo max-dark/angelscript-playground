@@ -1,0 +1,28 @@
+{
+  "name": "project",
+  "version-semver": "0.0.1",
+  "builtin-baseline": "a34c873a9717a888f58dc05268dea15592c2f0ff",
+  "dependencies": [
+    {
+      "name": "rmlui",
+      "features": [
+        "freetype"
+      ]
+    },
+    {
+      "name": "rocksdb"
+    },
+    {
+      "name": "asio"
+    },
+    {
+      "name": "jsoncons"
+    },
+    {
+      "name": "angelscript",
+      "features": [
+        "addons"
+      ]
+    }
+  ]
+}
