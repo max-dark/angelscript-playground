@@ -1,0 +1,9 @@
+# ide/editors
+.idea/
+.vs/
+.vscode/
+
+*.user
+
+build/
+cmake-build-*/
