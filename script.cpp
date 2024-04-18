@@ -22,12 +22,29 @@ private:
     int code;
 };
 
-void check(int r, const char* message)
+struct Check
+{
+Check& operator[](const char *msg)
+{
+    message = msg;
+    return *this;
+}
+Check& operator=(int r)
 {
     if (r < 0)
     {
         throw script_exception{r, message};
     }
+    return *this;
+}
+private:
+    const char * message = nullptr;
+};
+
+void check(int r, const char *message)
+{
+    Check v;
+    v[message] = r;
 }
 
 void not_null(const void* ptr, const char* message)
