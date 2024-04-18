@@ -142,15 +142,22 @@ int main(int argc, char **argv) {
         auto ctx = engine->CreateContext();
         not_null(ctx, "ctx == nullptr");
 
-        ctx->Prepare(func); // TODO: check ret code
-        int exec = ctx->Execute();
-
-        if (exec != asEXECUTION_FINISHED) // ctx can be suspended - see coroutines / debug samples
+        const int prepare = ctx->Prepare(func);
+        if (prepare == asSUCCESS)
         {
-            if (exec == asEXECUTION_EXCEPTION)
+            const int exec = ctx->Execute();
+
+            if (exec != asEXECUTION_FINISHED) // ctx can be suspended - see coroutines / debug samples
             {
-                std::cerr << "Exception: " << ctx->GetExceptionString() << std::endl;
+                if (exec == asEXECUTION_EXCEPTION)
+                {
+                    std::cerr << "Exception: " << ctx->GetExceptionString() << std::endl;
+                }
             }
+        }
+        else
+        {
+            std::cerr << "Prepare fail: " << prepare << std::endl;
         }
         ctx->Release();
     }
