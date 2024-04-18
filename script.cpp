@@ -233,6 +233,8 @@ void RegisterUtility(asIScriptEngine* engine)
 constexpr std::string_view script_code = R"(
 void main()
 {
+    ref r;
+    ref_gc rgc;
     print("Hello");
 }
 )";
