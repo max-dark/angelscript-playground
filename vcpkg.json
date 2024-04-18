@@ -23,6 +23,9 @@
       "features": [
         "addons"
       ]
+    },
+    {
+      "name": "sfml"
     }
   ]
 }
