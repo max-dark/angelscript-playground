@@ -34,6 +34,17 @@ sf::Time Time_neg(const sf::Time& a)
     return b;
 }
 
+sf::Time Time_add(const sf::Time& a, const sf::Time& b)
+{
+    return a + b;
+}
+
+sf::Time& Time_addAssign(sf::Time& a, const sf::Time& b)
+{
+    a +=b;
+    return a;
+}
+
 void Time_dtor(sf::Time* value)
 {
     value->~Time();
@@ -93,6 +104,12 @@ void Register(asIScriptEngine* engine)
 
         r = engine->RegisterObjectMethod(Type, "sf::Time opNeg()", asFUNCTION(Time_neg), asCALL_CDECL_OBJFIRST);
         check(r, "sf::Time::opNeg");
+
+        // arithmetic operators
+        r = engine->RegisterObjectMethod(Type, "sf::Time opAdd(const sf::Time &in) const", asFUNCTIONPR(Time_add, (const sf::Time&, const sf::Time&), sf::Time), asCALL_CDECL_OBJFIRST);
+        check(r, "sf::Time::opAdd");
+        r = engine->RegisterObjectMethod(Type, "sf::Time& opAddAssign(const sf::Time &in)", asFUNCTIONPR(Time_addAssign, (sf::Time&, const sf::Time&), sf::Time&), asCALL_CDECL_OBJFIRST);
+        check(r, "sf::Time::opAddAssign");
     }
 }
 }

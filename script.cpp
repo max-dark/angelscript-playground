@@ -239,6 +239,9 @@ void main()
     print(sf::seconds(-10.0));
     sf::Time neg = -seconds_1;
     print(neg);
+    print(seconds_1 + seconds_2);
+    seconds_1 += sf::seconds(5.0);
+    print(seconds_1);
 }
 )";
 
