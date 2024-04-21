@@ -222,6 +222,9 @@ void main()
     print(secs);
     print(sf::milliseconds(1000));
     print(sf::microseconds(100000));
+
+    print("a == b : " + (sf::TimeZero == secs));
+    print("a != b : " + (sf::TimeZero != secs));
 }
 )";
 

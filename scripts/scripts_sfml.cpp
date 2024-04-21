@@ -64,6 +64,10 @@ void Register(asIScriptEngine* engine)
         check(r, "sf::microseconds");
 
         // operators
+
+        r = engine->RegisterObjectMethod(Type, "bool opEquals(sf::Time)", asFUNCTIONPR(sf::operator==, (sf::Time, sf::Time), bool), asCALL_CDECL_OBJFIRST);
+        check(r, "sf::Time::opEquals");
+
     }
 }
 }
