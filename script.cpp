@@ -211,6 +211,8 @@ void main()
     ref r;
     ref_gc rgc;
     print("Hello");
+    sf::Time zero;
+    print(zero.asSeconds());
 }
 )";
 
