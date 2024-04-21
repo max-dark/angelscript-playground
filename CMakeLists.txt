@@ -52,6 +52,7 @@ target_sources(scripts
         scripts/scripts_tools.h scripts/scripts_tools.cpp
         scripts/scripts_sfml.h scripts/scripts_sfml.cpp
         scripts/sfml_time.h scripts/sfml_time.cpp
+        scripts/sfml_clock.h scripts/sfml_clock.cpp
 )
 
 set(EXE_NAME untitled)

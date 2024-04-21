@@ -206,13 +206,21 @@ void RegisterUtility(asIScriptEngine *engine)
 } // namespace tests
 
 constexpr std::string_view script_code = R"(
-void print(sf::Time value)
+void print(const sf::Time &in value)
 {
     print("Time(s/ms/us) == " + value.asSeconds() + " / " + value.asMilliseconds() + " / " + value.asMicroseconds());
 }
 
+void print(const sf::Clock &in clock)
+{
+    sf::Time value = clock.getElapsedTime();
+    print("elapsed(s/ms/us) == " + value.asSeconds() + " / " + value.asMilliseconds() + " / " + value.asMicroseconds());
+}
+
 void main()
 {
+    sf::Clock clk;
+    print(clk);
     ref r;
     ref_gc rgc;
     print("Hello");
@@ -223,6 +231,8 @@ void main()
     print(seconds_1);
     print(sf::milliseconds(1000));
     print(sf::microseconds(100000));
+    print(clk);
+    clk.restart();
 
     print("a == b : " + (sf::TimeZero == seconds_1));
     print("a != b : " + (sf::TimeZero != seconds_1));
@@ -246,6 +256,7 @@ void main()
     print(seconds_1 - seconds_2);
     seconds_1 -= sf::seconds(5.0);
     print(seconds_1);
+    print(clk);
 }
 )";
 
