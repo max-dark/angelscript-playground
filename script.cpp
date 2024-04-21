@@ -9,6 +9,8 @@
 #include "scripts/scripts_ext.h"
 #include "scripts/scripts_tools.h"
 
+#include "scripts/scripts_sfml.h"
+
 namespace tests
 {
 using namespace scripts::tools;
@@ -215,6 +217,7 @@ void main()
 int main(int argc, char **argv) {
 
     using namespace tests;
+    using namespace scripts::tools;
     auto engine = asCreateScriptEngine();
     // store scripts in engine memory(?)
     engine->SetEngineProperty(asEP_COPY_SCRIPT_SECTIONS, true);
@@ -225,6 +228,10 @@ int main(int argc, char **argv) {
     {
         int r;
         RegisterUtility(engine);
+
+        // SFML bindings
+        scripts::sfml::Register(engine);
+
         // simple classes what can be used in scripts
         Ref::Register(engine);
         RefGC::Register(engine);
