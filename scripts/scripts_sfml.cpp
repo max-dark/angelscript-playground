@@ -95,14 +95,14 @@ void Register(asIScriptEngine* engine)
         // operators
 
         // == , !=
-        r = engine->RegisterObjectMethod(Type, "bool opEquals(const sf::Time &in)", asFUNCTIONPR(Time_eq, (const sf::Time&, const sf::Time&), bool), asCALL_CDECL_OBJFIRST);
+        r = engine->RegisterObjectMethod(Type, "bool opEquals(const sf::Time &in) const", asFUNCTIONPR(Time_eq, (const sf::Time&, const sf::Time&), bool), asCALL_CDECL_OBJFIRST);
         check(r, "sf::Time::opEquals");
 
         // compare- <, >, <=, >=
-        r = engine->RegisterObjectMethod(Type, "int opCmp(const sf::Time &in)", asFUNCTIONPR(Time_cmp, (const sf::Time&, const sf::Time&), int), asCALL_CDECL_OBJFIRST);
+        r = engine->RegisterObjectMethod(Type, "int opCmp(const sf::Time &in) const", asFUNCTIONPR(Time_cmp, (const sf::Time&, const sf::Time&), int), asCALL_CDECL_OBJFIRST);
         check(r, "sf::Time::opCmp");
 
-        r = engine->RegisterObjectMethod(Type, "sf::Time opNeg()", asFUNCTION(Time_neg), asCALL_CDECL_OBJFIRST);
+        r = engine->RegisterObjectMethod(Type, "sf::Time opNeg() const", asFUNCTION(Time_neg), asCALL_CDECL_OBJFIRST);
         check(r, "sf::Time::opNeg");
 
         // arithmetic operators
