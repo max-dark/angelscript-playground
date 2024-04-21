@@ -125,6 +125,8 @@ void Register(asIScriptEngine* engine)
         check(r, "sf::Time::opSub");
         r = engine->RegisterObjectMethod(Type, "sf::Time& opSubAssign(const sf::Time &in)", asFUNCTIONPR(Time_subAssign, (sf::Time&, const sf::Time&), sf::Time&), asCALL_CDECL_OBJFIRST);
         check(r, "sf::Time::opSubAssign");
+
+        // TODO: add other operators opMul/opDiv/opMod
     }
 }
 }
