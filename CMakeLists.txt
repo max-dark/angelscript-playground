@@ -49,6 +49,7 @@ target_link_libraries(scripts
 target_sources(scripts
     PUBLIC
         scripts/scripts_ext.h scripts/scripts_ext.cpp
+        scripts/scripts_tools.h scripts/scripts_tools.cpp
         scripts/scripts_sfml.h scripts/scripts_sfml.cpp
 )
 

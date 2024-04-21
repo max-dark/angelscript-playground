@@ -7,97 +7,60 @@
 
 #include <angelscript.h>
 #include "scripts/scripts_ext.h"
+#include "scripts/scripts_tools.h"
 
-struct script_exception: std::runtime_error
+namespace tests
 {
-    script_exception(int code, const char* message) noexcept
-        : std::runtime_error(message)
-        , code{code}
-    {}
+using namespace scripts::tools;
 
-    [[nodiscard]]
-    int get_code() const noexcept { return code; }
-
-private:
-    int code;
-};
-
-struct Check
+struct Ref
 {
-Check& operator[](const char *msg)
-{
-    message = msg;
-    return *this;
-}
-Check& operator=(int r)
-{
-    if (r < 0)
-    {
-        throw script_exception{r, message};
-    }
-    return *this;
-}
-private:
-    const char * message = nullptr;
-};
-
-void check(int r, const char *message)
-{
-    Check v;
-    v[message] = r;
-}
-
-void not_null(const void* ptr, const char* message)
-{
-    if (nullptr == ptr)
-    {
-        throw std::runtime_error{message};
-    }
-}
-
-struct Ref {
     using counter_t = std::uint64_t;
     using ref_counter_t = std::atomic<counter_t>;
 
     static inline constexpr auto Type = "ref";
 
-    void AddRef() { ++refCount; }
+    void AddRef()
+    {
+        ++refCount;
+    }
 
-    void Release() {
-        if (--refCount == 0) {
+    void Release()
+    {
+        if (--refCount == 0)
+        {
             delete this;
         }
     }
 
     [[nodiscard]]
-    counter_t Count() const { return refCount; }
+    counter_t Count() const
+    {
+        return refCount;
+    }
 
-    static Ref* create()
+    static Ref *create()
     {
         return new Ref{};
     }
 
-    static int Register(asIScriptEngine* engine) noexcept
+    static void Register(asIScriptEngine *engine) noexcept
     {
-        try {
-            int r;
-            // register ref-counted type
-            r = engine->RegisterObjectType(Type, 0, asOBJ_REF);
-            check(r, "type register fail");
-            // add factory method for object creation
-            r = engine->RegisterObjectBehaviour(Type, asBEHAVE_FACTORY, "ref@ f()", asFUNCTION(create), asCALL_CDECL);
-            check(r, "factory register fail");
-            // add reference increment
-            r = engine->RegisterObjectBehaviour(Type, asBEHAVE_ADDREF, "void f()", asMETHOD(Ref, AddRef), asCALL_THISCALL);
-            check(r, "AddRef");
-            // add reference decrement
-            r = engine->RegisterObjectBehaviour(Type, asBEHAVE_RELEASE, "void f()", asMETHOD(Ref, Release), asCALL_THISCALL);
-            check(r, "Release");
-        }
-        catch (script_exception &e) {
-            return e.get_code();
-        }
-        return 0;
+        int r;
+        // register ref-counted type
+        r = engine->RegisterObjectType(Type, 0, asOBJ_REF);
+        check(r, "type register fail");
+        // add factory method for object creation
+        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_FACTORY, "ref@ f()", asFUNCTION(create), asCALL_CDECL);
+        check(r, "factory register fail");
+        // add reference increment
+        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_ADDREF, "void f()", asMETHOD(Ref, AddRef),
+                                            asCALL_THISCALL);
+        check(r, "AddRef");
+        // add reference decrement
+        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_RELEASE, "void f()", asMETHOD(Ref, Release),
+                                            asCALL_THISCALL);
+        check(r, "Release");
     }
 
     ~Ref() = default;
@@ -126,24 +89,32 @@ struct RefGC
         check(r, Type);
 
         // same as Ref
-        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_FACTORY, "ref_gc@ f()", asFUNCTION(RefGC::create), asCALL_CDECL);
+        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_FACTORY, "ref_gc@ f()", asFUNCTION(RefGC::create),
+                                            asCALL_CDECL);
         check(r, "factory");
-        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_ADDREF, "void f()", asMETHOD(RefGC, AddRef), asCALL_THISCALL);
+        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_ADDREF, "void f()", asMETHOD(RefGC, AddRef),
+                                            asCALL_THISCALL);
         check(r, "add ref");
-        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_RELEASE, "void f()", asMETHOD(RefGC, Release), asCALL_THISCALL);
+        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_RELEASE, "void f()", asMETHOD(RefGC, Release),
+                                            asCALL_THISCALL);
         check(r, "release");
 
         // gc support
 
-        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_GETREFCOUNT, "int f()", asMETHOD(RefGC, GetRefCount), asCALL_THISCALL);
+        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_GETREFCOUNT, "int f()", asMETHOD(RefGC, GetRefCount),
+                                            asCALL_THISCALL);
         check(r, "get ref");
-        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_SETGCFLAG, "void f()", asMETHOD(RefGC, SetGCFlag), asCALL_THISCALL);
+        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_SETGCFLAG, "void f()", asMETHOD(RefGC, SetGCFlag),
+                                            asCALL_THISCALL);
         check(r, "set flag");
-        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_GETGCFLAG, "bool f()", asMETHOD(RefGC, GetGCFlag), asCALL_THISCALL);
+        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_GETGCFLAG, "bool f()", asMETHOD(RefGC, GetGCFlag),
+                                            asCALL_THISCALL);
         check(r, "get flag");
-        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_ENUMREFS, "void f(int&in)", asMETHOD(RefGC, EnumReferences), asCALL_THISCALL);
+        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_ENUMREFS, "void f(int&in)", asMETHOD(RefGC, EnumReferences),
+                                            asCALL_THISCALL);
         check(r, "enum ref");
-        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_RELEASEREFS, "void f(int&in)", asMETHOD(RefGC, RemoveAllReferences), asCALL_THISCALL);
+        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_RELEASEREFS, "void f(int&in)",
+                                            asMETHOD(RefGC, RemoveAllReferences), asCALL_THISCALL);
         check(r, "release all");
 
         // cache type info
@@ -192,14 +163,14 @@ struct RefGC
         return refCount;
     }
 
-    void EnumReferences(asIScriptEngine* engine)
+    void EnumReferences(asIScriptEngine *engine)
     {
         // see dictionary add-on
         // for each sub-object
         //    engine->GCEnumCallback(object)
     }
 
-    void RemoveAllReferences(asIScriptEngine* engine)
+    void RemoveAllReferences(asIScriptEngine *engine)
     {
         // release all sub-objects
     }
@@ -212,23 +183,25 @@ private:
     gc_flag_t gcFlag = false;
 };
 
-asIScriptEngine* RefGC::engine_ptr = nullptr;
-asITypeInfo* RefGC::typeInfo = nullptr;
+asIScriptEngine *RefGC::engine_ptr = nullptr;
+asITypeInfo *RefGC::typeInfo = nullptr;
 
 namespace utility
 {
-    void print(std::string& msg)
-    {
-        std::cout << msg << std::endl;
-    }
+void print(std::string &msg)
+{
+    std::cout << msg << std::endl;
 }
-void RegisterUtility(asIScriptEngine* engine)
+}
+
+void RegisterUtility(asIScriptEngine *engine)
 {
     using namespace utility;
     int r;
     r = engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
     check(r, "print");
 }
+} // namespace tests
 
 constexpr std::string_view script_code = R"(
 void main()
@@ -240,18 +213,20 @@ void main()
 )";
 
 int main(int argc, char **argv) {
+
+    using namespace tests;
     auto engine = asCreateScriptEngine();
     // store scripts in engine memory(?)
     engine->SetEngineProperty(asEP_COPY_SCRIPT_SECTIONS, true);
     // "std" addons
     scripts::ext::registerExtensions(engine);
-    // simple class what can be used in scripts
-    Ref::Register(engine);
 
     try
     {
         int r;
         RegisterUtility(engine);
+        // simple classes what can be used in scripts
+        Ref::Register(engine);
         RefGC::Register(engine);
         // program should create module
         auto program = engine->GetModule("program", asGM_ALWAYS_CREATE);
