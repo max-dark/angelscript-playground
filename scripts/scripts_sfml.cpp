@@ -22,7 +22,8 @@ void Register(asIScriptEngine* engine)
     {
         const char* Type = "Time";
         int r;
-        r = engine->RegisterObjectType(Type, sizeof(sf::Time), asOBJ_VALUE | asGetTypeTraits<sf::Time>());
+        auto flags = asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<sf::Time>();
+        r = engine->RegisterObjectType(Type, sizeof(sf::Time), flags);
         check(r, "class sf::Time");
         // default ctor
         r = engine->RegisterObjectBehaviour(Type, asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(Time_ctor), asCALL_CDECL_OBJLAST);
@@ -39,6 +40,10 @@ void Register(asIScriptEngine* engine)
         check(r, "sf::Time::asMilliseconds()");
         r = engine->RegisterObjectMethod(Type, "int64 asMicroseconds() const", asMETHODPR(sf::Time, asMicroseconds, () const, sf::Int64), asCALL_THISCALL);
         check(r, "sf::Time::asMicroseconds()");
+
+        // static Members
+        r = engine->RegisterGlobalProperty("const sf::Time TimeZero", (void *) &sf::Time::Zero);
+        check(r, "static const sf::Time TimeZero;");
 
         // global functions
 

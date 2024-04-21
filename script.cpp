@@ -211,7 +211,7 @@ void main()
     ref r;
     ref_gc rgc;
     print("Hello");
-    sf::Time zero;
+    sf::Time zero = sf::TimeZero;
     print("Time == " + zero.asSeconds());
 }
 )";
