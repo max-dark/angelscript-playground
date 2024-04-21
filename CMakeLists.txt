@@ -81,3 +81,14 @@ target_sources(${SCRIPT_EXE}
     PRIVATE
         script.cpp
 )
+
+set(SFML_EXE sfml_exe)
+add_executable(${SFML_EXE} WIN32)
+target_link_libraries(${SFML_EXE}
+    PRIVATE
+        lib_sfml
+)
+target_sources(${SFML_EXE}
+    PRIVATE
+        sfml_window.cpp
+)
