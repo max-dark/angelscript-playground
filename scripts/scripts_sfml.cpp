@@ -23,6 +23,12 @@ int Time_cmp(sf::Time a, sf::Time b)
     return 1;
 }
 
+sf::Time Time_neg(sf::Time a)
+{
+    auto b = -a;
+    return b;
+}
+
 void Time_dtor(sf::Time* value)
 {
     value->~Time();
@@ -79,6 +85,10 @@ void Register(asIScriptEngine* engine)
         // compare- <, >, <=, >=
         r = engine->RegisterObjectMethod(Type, "int opCmp(sf::Time)", asFUNCTIONPR(Time_cmp, (sf::Time, sf::Time), int), asCALL_CDECL_OBJFIRST);
         check(r, "sf::Time::opCmp");
+
+        // FIXME: wrong return value
+        r = engine->RegisterObjectMethod(Type, "sf::Time opNeg()", asFUNCTION(Time_neg), asCALL_CDECL_OBJFIRST);
+        check(r, "sf::Time::opNeg");
     }
 }
 }

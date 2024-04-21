@@ -208,7 +208,7 @@ void RegisterUtility(asIScriptEngine *engine)
 constexpr std::string_view script_code = R"(
 void print(sf::Time value)
 {
-    print("Time == " + value.asSeconds());
+    print("Time(s/ms/us) == " + value.asSeconds() + " / " + value.asMilliseconds() + " / " + value.asMicroseconds());
 }
 
 void main()
@@ -218,16 +218,27 @@ void main()
     print("Hello");
     print(sf::TimeZero);
 
-    sf::Time secs = sf::seconds(10.0);
-    print(secs);
+    sf::Time seconds_1 = sf::seconds(10.0);
+    sf::Time seconds_2 = sf::seconds(20.0);
+    print(seconds_1);
     print(sf::milliseconds(1000));
     print(sf::microseconds(100000));
 
-    print("a == b : " + (sf::TimeZero == secs));
-    print("a != b : " + (sf::TimeZero != secs));
+    print("a == b : " + (sf::TimeZero == seconds_1));
+    print("a != b : " + (sf::TimeZero != seconds_1));
+    print("c == b : " + (seconds_2 == seconds_1));
 
-    print("a > b : " + (sf::TimeZero > secs));
-    print("a < b : " + (sf::TimeZero < secs));
+    print("a > b : " + (sf::TimeZero > seconds_1));
+    print("a < b : " + (sf::TimeZero < seconds_1));
+
+    print("c > b : " + (seconds_2 > seconds_1));
+    print("c < b : " + (seconds_2 < seconds_1));
+
+    print(seconds_1);
+    print(seconds_2);
+    print(sf::seconds(-10.0));
+    sf::Time neg = -seconds_1; // << bug here
+    print(neg);
 }
 )";
 
