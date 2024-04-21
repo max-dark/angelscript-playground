@@ -25,6 +25,9 @@ void check(int r, const char *message);
 
 void not_null(const void* ptr, const char* message);
 
+
+void on_engine_message(const asSMessageInfo* msg, void* param);
+
 } // namespace scripts::tools
 
 #endif //SCRIPTS_TOOLS_H
