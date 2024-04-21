@@ -213,6 +213,9 @@ void main()
     print("Hello");
     sf::Time zero = sf::TimeZero;
     print("Time == " + zero.asSeconds());
+
+    sf::Time secs = sf::seconds(10.0);
+    print("Time == " + secs.asSeconds());
 }
 )";
 
