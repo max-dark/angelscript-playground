@@ -45,6 +45,17 @@ sf::Time& Time_addAssign(sf::Time& a, const sf::Time& b)
     return a;
 }
 
+sf::Time Time_sub(const sf::Time& a, const sf::Time& b)
+{
+    return a - b;
+}
+
+sf::Time& Time_subAssign(sf::Time& a, const sf::Time& b)
+{
+    a -=b;
+    return a;
+}
+
 void Time_dtor(sf::Time* value)
 {
     value->~Time();
@@ -110,6 +121,10 @@ void Register(asIScriptEngine* engine)
         check(r, "sf::Time::opAdd");
         r = engine->RegisterObjectMethod(Type, "sf::Time& opAddAssign(const sf::Time &in)", asFUNCTIONPR(Time_addAssign, (sf::Time&, const sf::Time&), sf::Time&), asCALL_CDECL_OBJFIRST);
         check(r, "sf::Time::opAddAssign");
+        r = engine->RegisterObjectMethod(Type, "sf::Time opSub(const sf::Time &in) const", asFUNCTIONPR(Time_sub, (const sf::Time&, const sf::Time&), sf::Time), asCALL_CDECL_OBJFIRST);
+        check(r, "sf::Time::opSub");
+        r = engine->RegisterObjectMethod(Type, "sf::Time& opSubAssign(const sf::Time &in)", asFUNCTIONPR(Time_subAssign, (sf::Time&, const sf::Time&), sf::Time&), asCALL_CDECL_OBJFIRST);
+        check(r, "sf::Time::opSubAssign");
     }
 }
 }
