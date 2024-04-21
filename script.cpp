@@ -257,6 +257,13 @@ void main()
     seconds_1 -= sf::seconds(5.0);
     print(seconds_1);
     print(clk);
+    print("Vectors:");
+
+    sf::Vector2i v2i(1, 2);
+    sf::Vector3i v3i(1, 2, 3);
+
+    print("2d: " + v2i.x + ", " + v2i.y);
+    print("3d: " + v3i.x + ", " + v3i.y + ", " + v3i.z);
 }
 )";
 

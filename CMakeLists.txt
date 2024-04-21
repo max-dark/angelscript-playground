@@ -53,6 +53,7 @@ target_sources(scripts
         scripts/scripts_sfml.h scripts/scripts_sfml.cpp
         scripts/sfml_time.h scripts/sfml_time.cpp
         scripts/sfml_clock.h scripts/sfml_clock.cpp
+        scripts/sfml_vectors.h scripts/sfml_vectors.cpp
 )
 
 set(EXE_NAME untitled)

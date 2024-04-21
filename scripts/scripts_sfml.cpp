@@ -2,6 +2,7 @@
 #include "scripts_tools.h"
 #include "sfml_time.h"
 #include "sfml_clock.h"
+#include "sfml_vectors.h"
 
 namespace scripts::sfml
 {
@@ -14,6 +15,7 @@ int Register(asIScriptEngine *engine)
 
     system::RegisterTime(engine);
     system::RegisterClock(engine);
+    system::RegisterVectors(engine);
 
     r = engine->SetDefaultNamespace("");
     check(r, "unable select namespace ''");
