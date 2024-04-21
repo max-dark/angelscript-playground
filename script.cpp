@@ -206,16 +206,22 @@ void RegisterUtility(asIScriptEngine *engine)
 } // namespace tests
 
 constexpr std::string_view script_code = R"(
+void print(sf::Time value)
+{
+    print("Time == " + value.asSeconds());
+}
+
 void main()
 {
     ref r;
     ref_gc rgc;
     print("Hello");
-    sf::Time zero = sf::TimeZero;
-    print("Time == " + zero.asSeconds());
+    print(sf::TimeZero);
 
     sf::Time secs = sf::seconds(10.0);
-    print("Time == " + secs.asSeconds());
+    print(secs);
+    print(sf::milliseconds(1000));
+    print(sf::microseconds(100000));
 }
 )";
 

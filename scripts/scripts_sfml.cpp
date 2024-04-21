@@ -58,6 +58,10 @@ void Register(asIScriptEngine* engine)
 
         r = engine->RegisterGlobalFunction("sf::Time seconds(float)", asFUNCTIONPR(sf::seconds, (float), sf::Time), asCALL_CDECL);
         check(r, "sf::seconds");
+        r = engine->RegisterGlobalFunction("sf::Time milliseconds(int32)", asFUNCTIONPR(sf::milliseconds, (sf::Int32), sf::Time), asCALL_CDECL);
+        check(r, "sf::milliseconds");
+        r = engine->RegisterGlobalFunction("sf::Time microseconds(int64)", asFUNCTIONPR(sf::microseconds, (sf::Int64), sf::Time), asCALL_CDECL);
+        check(r, "sf::microseconds");
 
         // operators
     }
