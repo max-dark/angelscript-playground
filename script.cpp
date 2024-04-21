@@ -225,6 +225,9 @@ void main()
 
     print("a == b : " + (sf::TimeZero == secs));
     print("a != b : " + (sf::TimeZero != secs));
+
+    print("a > b : " + (sf::TimeZero > secs));
+    print("a < b : " + (sf::TimeZero < secs));
 }
 )";
 

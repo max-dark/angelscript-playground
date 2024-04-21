@@ -16,6 +16,13 @@ void Time_ctor(sf::Time* memory)
 //    new(memory) sf::Time{o};
 //}
 
+int Time_cmp(sf::Time a, sf::Time b)
+{
+    if (a == b) return 0;
+    if (a < b) return 1;
+    return 1;
+}
+
 void Time_dtor(sf::Time* value)
 {
     value->~Time();
@@ -65,9 +72,13 @@ void Register(asIScriptEngine* engine)
 
         // operators
 
+        // == , !=
         r = engine->RegisterObjectMethod(Type, "bool opEquals(sf::Time)", asFUNCTIONPR(sf::operator==, (sf::Time, sf::Time), bool), asCALL_CDECL_OBJFIRST);
         check(r, "sf::Time::opEquals");
 
+        // compare- <, >, <=, >=
+        r = engine->RegisterObjectMethod(Type, "int opCmp(sf::Time)", asFUNCTIONPR(Time_cmp, (sf::Time, sf::Time), int), asCALL_CDECL_OBJFIRST);
+        check(r, "sf::Time::opCmp");
     }
 }
 }
