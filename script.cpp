@@ -237,7 +237,7 @@ void main()
     print(seconds_1);
     print(seconds_2);
     print(sf::seconds(-10.0));
-    sf::Time neg = -seconds_1; // << bug here
+    sf::Time neg = -seconds_1;
     print(neg);
 }
 )";

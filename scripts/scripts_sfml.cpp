@@ -11,19 +11,24 @@ void Time_ctor(sf::Time* memory)
     new(memory) sf::Time{};
 }
 
-//void Time_copy(sf::Time* memory, const sf::Time& o)
-//{
-//    new(memory) sf::Time{o};
-//}
+void Time_copy(sf::Time* memory, const sf::Time& o)
+{
+    new(memory) sf::Time{o};
+}
 
-int Time_cmp(sf::Time a, sf::Time b)
+bool Time_eq(const sf::Time& left, const sf::Time& right)
+{
+    return left == right;
+}
+
+int Time_cmp(const sf::Time& a, const sf::Time& b)
 {
     if (a == b) return 0;
     if (a < b) return 1;
     return 1;
 }
 
-sf::Time Time_neg(sf::Time a)
+sf::Time Time_neg(const sf::Time& a)
 {
     auto b = -a;
     return b;
@@ -48,8 +53,8 @@ void Register(asIScriptEngine* engine)
         r = engine->RegisterObjectBehaviour(Type, asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(Time_ctor), asCALL_CDECL_OBJLAST);
         check(r, "sf::Time::Time()");
         // copy ctor
-        // r = engine->RegisterObjectBehaviour(Type, asBEHAVE_CONSTRUCT, "void f(const sf::Time& in)", asFUNCTION(Time_copy), asCALL_CDECL_OBJFIRST);
-        // check(r, "sf::Time::Time(sf::Time)");
+        r = engine->RegisterObjectBehaviour(Type, asBEHAVE_CONSTRUCT, "void f(const sf::Time& in)", asFUNCTION(Time_copy), asCALL_CDECL_OBJFIRST);
+        check(r, "sf::Time::Time(sf::Time)");
         // destructor
         r = engine->RegisterObjectBehaviour(Type, asBEHAVE_DESTRUCT, "void f()", asFUNCTION(Time_dtor), asCALL_CDECL_OBJLAST);;
         check(r, "sf::Time::~Time()");
@@ -79,14 +84,13 @@ void Register(asIScriptEngine* engine)
         // operators
 
         // == , !=
-        r = engine->RegisterObjectMethod(Type, "bool opEquals(sf::Time)", asFUNCTIONPR(sf::operator==, (sf::Time, sf::Time), bool), asCALL_CDECL_OBJFIRST);
+        r = engine->RegisterObjectMethod(Type, "bool opEquals(const sf::Time &in)", asFUNCTIONPR(Time_eq, (const sf::Time&, const sf::Time&), bool), asCALL_CDECL_OBJFIRST);
         check(r, "sf::Time::opEquals");
 
         // compare- <, >, <=, >=
-        r = engine->RegisterObjectMethod(Type, "int opCmp(sf::Time)", asFUNCTIONPR(Time_cmp, (sf::Time, sf::Time), int), asCALL_CDECL_OBJFIRST);
+        r = engine->RegisterObjectMethod(Type, "int opCmp(const sf::Time &in)", asFUNCTIONPR(Time_cmp, (const sf::Time&, const sf::Time&), int), asCALL_CDECL_OBJFIRST);
         check(r, "sf::Time::opCmp");
 
-        // FIXME: wrong return value
         r = engine->RegisterObjectMethod(Type, "sf::Time opNeg()", asFUNCTION(Time_neg), asCALL_CDECL_OBJFIRST);
         check(r, "sf::Time::opNeg");
     }
