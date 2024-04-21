@@ -20,21 +20,15 @@ void Register(asIScriptEngine* engine)
 
 int Register(asIScriptEngine *engine)
 {
-    try
-    {
-        int r;
-        r = engine->SetDefaultNamespace("sf");
-        check(r, "unable select namespace 'sf'");
+    int r;
+    r = engine->SetDefaultNamespace("sf");
+    check(r, "unable select namespace 'sf'");
 
-        system::Register(engine);
+    system::Register(engine);
 
-        r = engine->SetDefaultNamespace("");
-        check(r, "unable select namespace ''");
-    }
-    catch (const script_exception& e)
-    {
-        return e.get_code();
-    }
+    r = engine->SetDefaultNamespace("");
+    check(r, "unable select namespace ''");
+
     return asSUCCESS;
 }
 
