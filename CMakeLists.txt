@@ -6,11 +6,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(SFML COMPONENTS system window graphics REQUIRED)
 find_package(Angelscript REQUIRED) # Angelscript::angelscript
-find_package(asio REQUIRED) # asio::asio
-find_package(jsoncons REQUIRED) # jsoncons
-find_package(RmlUi REQUIRED) # RmlLua RmlCore RmlDebugger
-find_package(RocksDB REQUIRED) # RocksDB::rocksdb
-# find_package(sol2 REQUIRED) # sol2
 find_package(Threads REQUIRED) # Threads::Threads
 
 add_library(lib_sfml INTERFACE)
@@ -34,9 +29,6 @@ add_library(libraries INTERFACE)
 target_link_libraries(libraries
     INTERFACE
         Angelscript::angelscript
-        asio::asio
-        jsoncons
-        RocksDB::rocksdb
         Threads::Threads
 )
 
@@ -67,7 +59,6 @@ target_sources(${EXE_NAME}
 
 target_link_libraries(${EXE_NAME}
     PRIVATE
-        RmlCore RmlDebugger
         libraries
         scripts
 )
