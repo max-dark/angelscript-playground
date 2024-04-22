@@ -274,6 +274,8 @@ int main(int argc, char **argv) {
     auto engine = asCreateScriptEngine();
     // store scripts in engine memory(?)
     engine->SetEngineProperty(asEP_COPY_SCRIPT_SECTIONS, true);
+    // enable warnings
+    engine->SetEngineProperty(asEP_COMPILER_WARNINGS, 1);
     engine->SetMessageCallback(asFUNCTION(scripts::tools::on_engine_message), nullptr, asCALL_CDECL);
     // "std" addons
     scripts::ext::registerExtensions(engine);
