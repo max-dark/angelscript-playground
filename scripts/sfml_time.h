@@ -6,6 +6,6 @@
 namespace scripts::sfml::system
 {
 void RegisterTime(asIScriptEngine* engine);
-} // namespace scripts::sfml
+} // namespace scripts::sfml::system
 
 #endif //SCRIPTS_SFML_TIME_H

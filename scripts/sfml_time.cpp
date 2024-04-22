@@ -129,4 +129,4 @@ void RegisterTime(asIScriptEngine *engine)
     // TODO: add other operators opMul/opDiv/opMod
 }
 
-}
+} // namespace scripts::sfml::system
