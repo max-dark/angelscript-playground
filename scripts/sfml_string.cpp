@@ -30,14 +30,14 @@ void string_dtor(sf::String *memory)
     memory->~String();
 }
 
-sf::String& string_assign(sf::String& left, const sf::String& right)
-{
-    return (left = right);
-}
-
 sf::String& string_assign(sf::String& left, const std::string& right)
 {
     return (left = sf::String::fromUtf8(right.begin(), right.end()));
+}
+
+sf::String& string_add_assign(sf::String& left, const std::string& right)
+{
+    return (left += sf::String::fromUtf8(right.begin(), right.end()));
 }
 
 void RegisterString(asIScriptEngine *engine)
@@ -71,6 +71,15 @@ void RegisterString(asIScriptEngine *engine)
     check(r, "sf::string to_string()");
 
     r = engine->RegisterObjectMethod(Type, "String& opAssign(const String &in)", asMETHODPR(sf::String, operator=, (const sf::String&), sf::String&), asCALL_THISCALL);
+    check(r, "assign");
+
+    r = engine->RegisterObjectMethod(Type, "String& opAssign(const string &in)", asFUNCTIONPR(string_assign, (sf::String&, const std::string&), sf::String&), asCALL_CDECL_OBJFIRST);
+    check(r, "assign");
+
+    r = engine->RegisterObjectMethod(Type, "String& opAddAssign(const String &in)", asMETHODPR(sf::String, operator+=, (const sf::String&), sf::String&), asCALL_THISCALL);
+    check(r, "assign");
+
+    r = engine->RegisterObjectMethod(Type, "String& opAddAssign(const string &in)", asFUNCTIONPR(string_add_assign, (sf::String&, const std::string&), sf::String&), asCALL_CDECL_OBJFIRST);
     check(r, "assign");
 }
 } // namespace scripts::sfml::system
