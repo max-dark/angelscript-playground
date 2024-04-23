@@ -3,76 +3,74 @@
 #include "scripts_tools.h"
 
 #include <string>
-#include <atomic>
+
 
 namespace scripts::sfml::system
 {
 using scripts::tools::check;
 using scripts::tools::not_null;
 
-struct StringRef
+void string_ctor(sf::String *memory)
 {
-    using counter_t = int;
-    using ref_count_t = std::atomic<counter_t>;
+    new(memory) sf::String{};
+}
 
-    StringRef()
-        : value{}{}
-    explicit StringRef(const std::string& str)
-        : value(sf::String::fromUtf8(str.begin(), str.end()))
-        {}
-    StringRef(const StringRef& str)
-        : value(str.value)
-    {}
-
-    // factory methods
-    static StringRef* create()
-    {
-        return new StringRef;
-    }
-    static StringRef* create_std(const std::string& str)
-    {
-        return new StringRef{str};
-    }
-    static StringRef* create_sf(const sf::String& str)
-    {
-        return new StringRef{str};
-    }
-
-
-    void AddRef()
-    {
-        ++refCount;
-    }
-
-    void Release()
-    {
-        if (--refCount == 0)
-        {
-            delete this;
-        }
-    }
-
-    sf::String value;
-    ref_count_t refCount = 1;
-};
-
-void RegisterString(asIScriptEngine* engine)
+void string_ctor(sf::String *memory, const std::string &str)
 {
-    const char * Type = "String";
+    new(memory) sf::String{sf::String::fromUtf8(str.begin(), str.end())};
+}
+
+void string_ctor(sf::String *memory, const sf::String &str)
+{
+    new(memory) sf::String{str};
+}
+
+void string_dtor(sf::String *memory)
+{
+    memory->~String();
+}
+
+sf::String& string_assign(sf::String& left, const sf::String& right)
+{
+    return (left = right);
+}
+
+sf::String& string_assign(sf::String& left, const std::string& right)
+{
+    return (left = sf::String::fromUtf8(right.begin(), right.end()));
+}
+
+void RegisterString(asIScriptEngine *engine)
+{
+    const char *Type = "String";
     int r;
 
-    r = engine->RegisterObjectType(Type, 0, asOBJ_REF);
+    asDWORD flags = asOBJ_VALUE | asGetTypeTraits<sf::String>();
+    r = engine->RegisterObjectType(Type, sizeof(sf::String), flags);
     check(r, "sf::String");
 
-    r = engine->RegisterObjectBehaviour(Type, asBEHAVE_FACTORY, "String@ f()", asFUNCTION(StringRef::create), asCALL_CDECL);
-    check(r, "String::create");
-    r = engine->RegisterObjectBehaviour(Type, asBEHAVE_FACTORY, "String@ f(const string &in)", asFUNCTION(StringRef::create_std), asCALL_CDECL);
-    check(r, "String::create_std");
-    r = engine->RegisterObjectBehaviour(Type, asBEHAVE_FACTORY, "String@ f(const String &in)", asFUNCTION(StringRef::create_sf), asCALL_CDECL);
-    check(r, "String::create_std");
-    r = engine->RegisterObjectBehaviour(Type, asBEHAVE_ADDREF, "void f()", asMETHOD(StringRef, AddRef), asCALL_THISCALL);
-    check(r, "String::AddRef");
-    r = engine->RegisterObjectBehaviour(Type, asBEHAVE_RELEASE, "void f()", asMETHOD(StringRef, Release), asCALL_THISCALL);
-    check(r, "String::Release");
+    r = engine->RegisterObjectBehaviour(Type, asBEHAVE_CONSTRUCT, "void f()",
+                                        asFUNCTIONPR(string_ctor, (sf::String * ), void), asCALL_CDECL_OBJFIRST);
+    check(r, "string ctor()");
+
+    r = engine->RegisterObjectBehaviour(Type, asBEHAVE_CONSTRUCT, "void f(const string &in)",
+                                        asFUNCTIONPR(string_ctor, (sf::String * , const std::string&), void),
+                                        asCALL_CDECL_OBJFIRST);
+    check(r, "string ctor");
+
+    r = engine->RegisterObjectBehaviour(Type, asBEHAVE_CONSTRUCT, "void f(const sf::String &in)",
+                                        asFUNCTIONPR(string_ctor, (sf::String * , const sf::String&), void),
+                                        asCALL_CDECL_OBJFIRST);
+    check(r, "string ctor");
+
+    r = engine->RegisterObjectBehaviour(Type, asBEHAVE_DESTRUCT, "void f()",
+                                        asFUNCTIONPR(string_dtor, (sf::String * ), void), asCALL_CDECL_OBJFIRST);
+    check(r, "string dtor()");
+
+    r = engine->RegisterObjectMethod(Type, "string to_string()", asMETHOD(sf::String, operator std::string), asCALL_THISCALL);
+    check(r, "sf::string to_string()");
+
+    r = engine->RegisterObjectMethod(Type, "String& opAssign(const String &in)", asMETHODPR(sf::String, operator=, (const sf::String&), sf::String&), asCALL_THISCALL);
+    check(r, "assign");
 }
 } // namespace scripts::sfml::system
