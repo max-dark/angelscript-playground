@@ -87,3 +87,20 @@ target_sources(${SFML_EXE}
     PRIVATE
         sfml_window.cpp
 )
+
+set(TOOL_TOKENS tokens)
+add_executable(${TOOL_TOKENS})
+target_link_libraries(${TOOL_TOKENS}
+    PRIVATE
+        libraries
+)
+target_sources(${TOOL_TOKENS}
+    PRIVATE
+        tools/tokens.cpp
+        scripts/scripts_ext.h scripts/scripts_ext.cpp
+        scripts/scripts_tools.h scripts/scripts_tools.cpp
+)
+target_include_directories(${TOOL_TOKENS}
+    PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}
+)
