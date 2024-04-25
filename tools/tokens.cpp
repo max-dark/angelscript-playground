@@ -63,8 +63,12 @@ Token::list parse(asIScriptEngine* engine, const std::string& code)
     return tokens;
 }
 
-const auto script = R"(
-class Main
+const auto script = R"(/**
+multiline comment
+*/
+#pragma // unknown token
+import print;
+shared class Main // line comment
 {
     void main(array<string> args)
     {
