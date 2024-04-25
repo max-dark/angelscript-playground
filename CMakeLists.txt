@@ -49,6 +49,8 @@ target_sources(scripts
         scripts/sfml_string.h scripts/sfml_string.cpp
 )
 
+add_subdirectory(tools)
+
 set(EXE_NAME untitled)
 add_executable(${EXE_NAME} WIN32)
 
