@@ -4,7 +4,6 @@ project(playground-lsp)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(unofficial-json-rpc-cxx REQUIRED) # unofficial::json-rpc-cxx::json-rpc-cxx
 find_package(Angelscript REQUIRED) # Angelscript::angelscript
 find_package(Threads REQUIRED) # Threads::Threads
 
@@ -13,7 +12,10 @@ add_library(${SERVER_LIBS} INTERFACE)
 target_link_libraries(${SERVER_LIBS}
     INTERFACE
         Angelscript::angelscript
-        unofficial::json-rpc-cxx::json-rpc-cxx
+        jsoncpp
+        microhttpd
+        jsonrpccpp-common
+        jsonrpccpp-server
         Threads::Threads
 )
 

@@ -11,9 +11,6 @@
     },
     {
       "name": "sfml"
-    },
-    {
-      "name": "json-rpc-cxx"
     }
   ]
 }
