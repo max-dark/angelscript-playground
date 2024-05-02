@@ -25,6 +25,7 @@ std::string to_string(asETokenClass tokenClass)
         case asTC_WHITESPACE:
             return "whitespace"s;
     }
+    return "unknown"s;
 }
 
 struct Token
