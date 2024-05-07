@@ -196,6 +196,27 @@ struct AnnotatedTextEdit: TextEdit
     ChangeAnnotationIdentifier annotationId;
 };
 
+struct TextDocumentEdit
+{
+    OptionalVersionedTextDocumentIdentifier textDocument;
+
+    variant<TextEdit, std::vector<AnnotatedTextEdit>> edits;
+};
+
+struct Location
+{
+    DocumentUri uri;
+    Range range;
+};
+
+struct LocationLink
+{
+    nullable<Range> originSelectionRange;
+    DocumentUri targetUri;
+    Range targetRange;
+    Range targetSelectionRange;
+};
+
 //struct HoverParams
 //{
 //
