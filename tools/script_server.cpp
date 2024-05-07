@@ -53,12 +53,15 @@ public:
 
     static auto new_method(const method_id& id)
     {
-        return jsonrpc::Procedure{{id.data(), id.size()}, jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_OBJECT, nullptr};
+        auto method = jsonrpc::Procedure{{id.data(), id.size()}, jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_OBJECT, nullptr};
+        return method;
     }
 
     static auto new_notify(const method_id& id)
     {
-        return jsonrpc::Procedure{{id.data(), id.size()}, jsonrpc::PARAMS_BY_NAME, nullptr};
+        auto notify = jsonrpc::Procedure{{id.data(), id.size()}, jsonrpc::PARAMS_BY_NAME, nullptr};
+        notify.SetProcedureType(jsonrpc::RPC_NOTIFICATION);
+        return notify;
     }
 
     void bindMethods()
