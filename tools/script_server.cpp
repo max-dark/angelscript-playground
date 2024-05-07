@@ -120,20 +120,78 @@ struct ProgressParams
     T value;
 };
 
-namespace lsp
+namespace base
 {
 
-}
-
-namespace types
-{
 struct URI: string {};
+struct DocumentUri: string {};
 
-struct RegularExpressionsClientCapabilities
+struct Position
 {
-    string engine;
-
+    uinteger line = 0;
+    uinteger character = 0;
 };
+
+struct Range
+{
+    Position start;
+    Position end;
+};
+
+struct TextDocumentItem
+{
+    DocumentUri uri;
+    string languageId;
+    integer version;
+    string text;
+};
+
+struct TextDocumentIdentifier
+{
+    DocumentUri uri;
+};
+
+struct VersionedTextDocumentIdentifier: TextDocumentIdentifier
+{
+    integer version = 0;
+};
+
+struct OptionalVersionedTextDocumentIdentifier: TextDocumentIdentifier
+{
+    nullable<integer> version;
+};
+
+struct TextDocumentPositionParams
+{
+    TextDocumentIdentifier textDocument;
+    Position position;
+};
+
+struct DocumentFilter
+{
+    nullable<string> language;
+    nullable<string> scheme;
+    nullable<string> pattern;
+};
+
+struct DocumentSelector: DocumentFilter {};
+
+//struct HoverParams
+//{
+//
+//    string textDocument;
+//    Position position;
+//};
+//struct HoverResult
+//{
+//    string value;
+//};
+//
+//struct RegularExpressionsClientCapabilities
+//{
+//    string engine; // ECMAScript
+//    nullable<string> version; // ECMAScript 2020
+//};
 }
 }
 
