@@ -7,6 +7,13 @@
 #include <mutex>
 #include <condition_variable>
 #include <chrono>
+#include <optional>
+#include <cstdint>
+#include <any>
+#include <variant>
+#include <vector>
+#include <map>
+#include <memory>
 
 #include <jsonrpccpp/server.h>
 #include <jsonrpccpp/server/connectors/httpserver.h>
@@ -17,6 +24,118 @@ using namespace std::literals;
 using method_id = const std::string_view;
 using request_t = Json::Value;
 using response_t = Json::Value;
+
+template<class T>
+using nullable = std::optional<T>;
+template<class... T>
+using variant = std::variant<T...>;
+using null = std::nullopt_t;
+using integer = std::int32_t;
+using uinteger = std::uint32_t;
+using decimal = double;
+using number = long double;
+using boolean = bool;
+using string = std::string;
+
+struct any;
+using any_ptr = std::unique_ptr<any>;
+
+struct object: std::map<string, any_ptr> {};
+struct array: std::vector<any_ptr> {};
+
+struct any : variant<object, array, string, integer, uinteger, decimal, boolean, null> {};
+
+namespace json_rpc
+{
+struct Message
+{
+    string jsonrpc; // "2.0"
+};
+
+using Params = nullable<variant<array, object>>;
+
+using Id = std::variant<integer, string>;
+
+struct RequestMessage: Message
+{
+    Id id;
+    string method;
+    Params params;
+};
+
+struct ResponseError
+{
+    integer code;
+    string message;
+    nullable<variant<string, number, boolean, array, object, null>> data;
+};
+
+struct ResponseMessage: Message
+{
+    variant<integer, string, null> id;
+    nullable<variant<string>> result;
+    nullable<ResponseError> error;
+};
+
+enum ErrorCodes: integer
+{
+    ParseError = -32700,
+    InvalidRequest = -32600,
+    MethodNotFound = -32601,
+    InvalidParams = -32602,
+    InternalError = -32603,
+
+    rpcReservedErrorRangeStart = -32099,
+    ServerNotInitialized = -32002,
+    UnknownErrorCode = -32001,
+    rpcReservedErrorRangeEnd = -32000,
+
+    lspReservedErrorStart = -32899,
+    RequestFailed = -32803,
+    ServerCanceled = -32802,
+    ContentModified = -32801,
+    RequestCanceled = -32800,
+    lspReservedErrorEnd = -32800,
+};
+
+// for methods starts with "$/"
+struct NotificationMessage: Message
+{
+    string method;
+    Params params;
+};
+
+// params for "$/cancelRequest"
+struct CancelRequest
+{
+    Id id;
+};
+
+using ProgressToken = Id;
+
+template<class T>
+struct ProgressParams
+{
+    ProgressToken token;
+    T value;
+};
+
+namespace lsp
+{
+
+}
+
+namespace types
+{
+struct URI: string {};
+
+struct RegularExpressionsClientCapabilities
+{
+    string engine;
+
+};
+}
+}
 
 namespace methods
 {
