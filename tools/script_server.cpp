@@ -200,7 +200,7 @@ struct TextDocumentEdit
 {
     OptionalVersionedTextDocumentIdentifier textDocument;
 
-    variant<TextEdit, std::vector<AnnotatedTextEdit>> edits;
+    std::vector<variant<TextEdit, AnnotatedTextEdit>> edits;
 };
 
 struct Location
