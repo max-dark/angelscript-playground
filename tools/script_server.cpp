@@ -176,6 +176,21 @@ struct DocumentFilter
 
 struct DocumentSelector: DocumentFilter {};
 
+struct TextEdit
+{
+    Range range;
+    string newText;
+};
+
+struct ChangeAnnotation
+{
+    string label;
+    nullable<boolean> needsConfirmation;
+    nullable<string> description;
+};
+
+struct ChangeAnnotationIdentifier: string {};
+
 //struct HoverParams
 //{
 //
@@ -225,7 +240,7 @@ class Server: public jsonrpc::AbstractServer<Server>
     using notify_ptr = void(Server::*)(const request_t&);
 public:
     explicit Server(jsonrpc::HttpServer& server)
-        : jsonrpc::AbstractServer<Server>(server)
+            : jsonrpc::AbstractServer<Server>(server)
     {}
 
     static auto new_method(const method_id& id)
