@@ -191,6 +191,11 @@ struct ChangeAnnotation
 
 struct ChangeAnnotationIdentifier: string {};
 
+struct AnnotatedTextEdit: TextEdit
+{
+    ChangeAnnotationIdentifier annotationId;
+};
+
 //struct HoverParams
 //{
 //
