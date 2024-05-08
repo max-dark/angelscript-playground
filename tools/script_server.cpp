@@ -217,6 +217,41 @@ struct LocationLink
     Range targetSelectionRange;
 };
 
+enum DiagnosticSeverity: integer
+{
+    Error = 1,
+    Warning = 2,
+    Information = 3,
+    Hint = 4,
+};
+
+struct CodeDescription
+{
+    URI href;
+};
+
+enum DiagnosticTag: integer
+{
+    Unnecessary = 1,
+    Deprecated = 3,
+};
+
+struct DiagnosticRelatedInformation
+{
+    Location location;
+    string message;
+};
+
+struct Diagnostic
+{
+    Range range;
+    nullable<DiagnosticSeverity> severity;
+    nullable<variant<integer, string>> code;
+    nullable<CodeDescription> codeDescription;
+    nullable<string> source;
+    nullable<any> data;
+};
+
 //struct HoverParams
 //{
 //
