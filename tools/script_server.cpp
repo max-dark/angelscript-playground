@@ -123,8 +123,12 @@ struct ProgressParams
 namespace base
 {
 
-struct URI: string {};
-struct DocumentUri: string {};
+struct URI : string
+{
+};
+struct DocumentUri : string
+{
+};
 
 struct Position
 {
@@ -151,12 +155,12 @@ struct TextDocumentIdentifier
     DocumentUri uri;
 };
 
-struct VersionedTextDocumentIdentifier: TextDocumentIdentifier
+struct VersionedTextDocumentIdentifier : TextDocumentIdentifier
 {
     integer version = 0;
 };
 
-struct OptionalVersionedTextDocumentIdentifier: TextDocumentIdentifier
+struct OptionalVersionedTextDocumentIdentifier : TextDocumentIdentifier
 {
     nullable<integer> version;
 };
@@ -174,7 +178,9 @@ struct DocumentFilter
     nullable<string> pattern;
 };
 
-struct DocumentSelector: DocumentFilter {};
+struct DocumentSelector : DocumentFilter
+{
+};
 
 struct TextEdit
 {
@@ -189,9 +195,11 @@ struct ChangeAnnotation
     nullable<string> description;
 };
 
-struct ChangeAnnotationIdentifier: string {};
+struct ChangeAnnotationIdentifier : string
+{
+};
 
-struct AnnotatedTextEdit: TextEdit
+struct AnnotatedTextEdit : TextEdit
 {
     ChangeAnnotationIdentifier annotationId;
 };
@@ -217,7 +225,7 @@ struct LocationLink
     Range targetSelectionRange;
 };
 
-enum DiagnosticSeverity: integer
+enum DiagnosticSeverity : integer
 {
     Error = 1,
     Warning = 2,
@@ -230,7 +238,7 @@ struct CodeDescription
     URI href;
 };
 
-enum DiagnosticTag: integer
+enum DiagnosticTag : integer
 {
     Unnecessary = 1,
     Deprecated = 3,
@@ -250,6 +258,19 @@ struct Diagnostic
     nullable<CodeDescription> codeDescription;
     nullable<string> source;
     nullable<any> data;
+};
+
+struct Command
+{
+    string title;
+    string command;
+    nullable<array> arguments;
+};
+
+struct MarkupKind : string
+{
+    static inline const char PlainText[] = "plaintext";
+    static inline const char Markdown[] = "markdown";
 };
 
 //struct HoverParams
