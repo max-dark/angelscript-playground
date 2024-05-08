@@ -328,6 +328,45 @@ struct DeleteFile
     nullable<ChangeAnnotationIdentifier> annotationId;
 };
 
+struct WorkspaceEdit
+{
+    nullable<std::map<DocumentUri, std::vector<TextEdit>>> changes;
+    using Edit = std::variant<TextDocumentEdit, CreateFile, RenameFile, DeleteFile>;
+    using EditList = std::vector<Edit>;
+    using Changes = std::variant<std::vector<TextDocumentEdit>, EditList>;
+    nullable<Changes> documentChanges;
+    nullable<std::map<string, ChangeAnnotation>> changeAnnotations;
+};
+
+struct ResourceOperationKind: string
+{
+    static inline const char Create[] = "create";
+    static inline const char Rename[] = "rename";
+    static inline const char Delete[] = "delete";
+};
+
+struct FailureHandlingKind: string
+{
+    static inline const char Abort[] = "abort";
+    static inline const char Transactional[] = "transactional";
+    static inline const char TextOnlyTransactional[] = "textOnlyTransactional";
+    static inline const char Undo[] = "undo";
+};
+
+struct WorkspaceEditClientCapabilities
+{
+    nullable<boolean> documentChanges;
+    nullable<std::vector<ResourceOperationKind>> resourceOperations;
+    nullable<FailureHandlingKind> failureHandling;
+    nullable<boolean> normalizesLineEndings;
+
+    struct AnnotationSupport
+    {
+        nullable<boolean> groupsOnLabel;
+    };
+
+    nullable<AnnotationSupport> changeAnnotationSupport;
+};
 //struct HoverParams
 //{
 //
