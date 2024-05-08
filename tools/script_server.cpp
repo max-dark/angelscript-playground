@@ -273,6 +273,32 @@ struct MarkupKind : string
     static inline const char Markdown[] = "markdown";
 };
 
+struct MarkupContent
+{
+    MarkupKind kind;
+    string value;
+};
+
+struct MarkdownClientCapabilities
+{
+    string parser;
+    nullable<string> version;
+    nullable<std::vector<string>> allowedTags;
+};
+
+struct CreateFileOptions
+{
+    nullable<boolean> override;
+    nullable<boolean> ignoreIfExists;
+};
+
+struct CreateFile
+{
+    string kind; // == 'create'
+    nullable<CreateFileOptions> options;
+    nullable<ChangeAnnotationIdentifier> annotationId;
+};
+
 //struct HoverParams
 //{
 //
