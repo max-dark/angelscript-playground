@@ -299,6 +299,35 @@ struct CreateFile
     nullable<ChangeAnnotationIdentifier> annotationId;
 };
 
+struct RenameFileOptions
+{
+    nullable<boolean> override;
+    nullable<boolean> ignoreIfExists;
+};
+
+struct RenameFile
+{
+    string kind; // == 'rename'
+    DocumentUri oldUri;
+    DocumentUri newUri;
+    nullable<RenameFileOptions> options;
+    nullable<ChangeAnnotationIdentifier> annotationId;
+};
+
+struct DeleteFileOptions
+{
+    nullable<boolean> recursive;
+    nullable<boolean> ignoreIfNotExists;
+};
+
+struct DeleteFile
+{
+    string kind; // == 'delete'
+    DocumentUri uri;
+    nullable<DeleteFileOptions> options;
+    nullable<ChangeAnnotationIdentifier> annotationId;
+};
+
 //struct HoverParams
 //{
 //
